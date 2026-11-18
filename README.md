@@ -157,10 +157,10 @@ Enterprise-Campus-Network/
 ├── topology/
 │   └── campus-topology.png
 ├── configs/
-│   ├── access/                  # campus access references
-│   ├── distribution/            # campus distribution references
-│   ├── edge/                    # campus edge + BGP/NAT references
-│   └── wan/                     # ISP-1 and ISP-2 reference configurations
+│   ├── access/
+│   ├── distribution/
+│   ├── edge/
+│   └── wan/
 ├── docs/
 │   ├── architecture.md
 │   ├── ip-addressing.md
@@ -175,6 +175,6 @@ Enterprise-Campus-Network/
 
 ## Lessons from the lab
 
-Having built a similar network in the past, I was already familiar with many of the technologies involved, so I encountered relatively few issues during implementation. This project helped reinforce my understanding of network design and troubleshooting, particularly interpreting what different verification commands actually demonstrate. For example, a traceroute displaying a physical SVI address does not contradict an HSRP virtual gateway, and increasing NAT counters do not necessarily confirm successful Internet connectivity. I plan to continue updating this repository as I expand the lab and conduct further redundancy and failover testing.
+Having built a similar network in the past, I was already familiar with many of the technologies involved, so I encountered relatively few issues during implementation. Moving forward, I plan to expand the network by implementing OSPFv3, IPv6 addressing, HSRP for IPv6, and OSPF authentication. I also want to further optimize Rapid PVST+, particularly root bridge placement, path selection, and convergence. As the network evolves, I'll continue documenting new implementations, troubleshooting experiences, and redundancy and failover testing.
 
 [More troubleshooting notes](notes/lessons-learned.md)
