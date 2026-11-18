@@ -150,15 +150,11 @@ Enterprise-Campus-Network/
 │   ├── edge/
 │   └── wan/
 ├── docs/
-│   ├── architecture.md
-│   ├── ip-addressing.md
-│   ├── redundancy.md
-│   ├── security.md
-│   ├── design-decisions.md
-│   └── wan-bgp-nat.md
-└── notes/
-    ├── troubleshooting-log.md
-    └── lessons-learned.md
-```
+    ├── architecture.md
+    ├── ip-addressing.md
+    ├── redundancy.md
+    ├── security.md
+    ├── design-decisions.md
+    └── wan-bgp-nat.md
 
-[More troubleshooting notes](notes/lessons-learned.md)
+```
