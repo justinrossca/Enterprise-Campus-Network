@@ -2,17 +2,15 @@
 
 **Two-tier campus networking, redundant edge routing, dual-ISP BGP, and NAT/PAT in GNS3**
 
-A Cisco networking lab I built to practise designing, configuring, and troubleshooting a small enterprise campus. The goal is to understand how Layer 2 and Layer 3 technologies interact, especially when links or devices fail. This repository records the design, configuration references, observed results, and areas I'm still testing.
+A Cisco networking lab I built to practice designing, configuring, and troubleshooting a small enterprise campus.
 
-> **Lab status:** Consolidated single-site configuration references for campus switching, OSPF, dual-multihomed BGP and ISP-1 NAT/PAT. The merged edge files are documentation designs based on separate lab snapshots; BGP neighbor state and ISP-2 Internet failover still require verification.
+> **Lab status:** Consolidated single-site configuration references for campus switching, OSPF, dual-multihomed BGP and ISP-1 NAT/PAT.
 
 ## Overview
 
-The two-tier campus uses dual-homed Layer 2 access switches and Layer 3 distribution switches. Distribution provides HSRP gateways, a three-link LACP Port-channel and four routed OSPF links to the enterprise edges. EDGE-01 retains the campus DHCP pools for VLANs 10, 20 and 90.
+The two-tier campus uses Layer 2 access switches and Layer 3 distribution switches. Distribution provides HSRP gateways, a three-link LACP Port-channel and four routed OSPF links to the enterprise edges. EDGE-01 retains the campus DHCP pools for VLANs 10, 20 and 90.
 
-Both edge routers connect to two simulated ISPs through four eBGP peerings in Enterprise AS 65000. They also configure loopback iBGP, ISP-1 local preference and route-map-based NAT/PAT. ISP-1 connects to the GNS3 Internet through PAT; ISP-2 NAT and full Internet failover are still to be validated.
-
-This repository documents **one enterprise site**. The separate SRv6 multi-site backbone will be maintained in another repository.
+Both edge routers connect to two simulated ISPs through four eBGP sessions within Enterprise AS 65000. The network also implements iBGP, BGP local preference to prioritize ISP-1, and NAT/PAT for Internet connectivity.
 
 ## Network topology
 
@@ -109,12 +107,6 @@ The baseline lab uses VLAN separation, DHCP snooping, Dynamic ARP Inspection, st
 | Enterprise edge configuration contains four eBGP neighbors and loopback iBGP | BGP peers and policies are defined | Does not prove the sessions are Established |
 | Enterprise edges and ISP-1 contain PAT rules | ISP-1 NAT path is defined | No completed ISP-2 NAT failover test |
 
-![Original campus PC traceroute](validation-tests/screenshots/traceroute-to-edge.png)
-
-![Earlier direct-NAT test](validation-tests/screenshots/edge02-nat-counters.png)
-
-See the [verification log](validation-tests/README.md), [WAN validation checklist](validation-tests/wan-test-log.md), and [troubleshooting notes](notes/troubleshooting-log.md).
-
 ## Configuration references
 
 The published configuration files are **sanitized, consolidated reference configurations**, not verified live running-config exports. There is **one configuration per device**, with BGP and NAT incorporated directly into each edge file. Campus VLAN 90 and unique OSPF router IDs are kept consistent.
@@ -176,10 +168,6 @@ Enterprise-Campus-Network/
 │   ├── security.md
 │   ├── design-decisions.md
 │   └── wan-bgp-nat.md
-├── validation-tests/
-│   ├── README.md
-│   ├── wan-test-log.md
-│   └── screenshots/
 └── notes/
     ├── troubleshooting-log.md
     └── lessons-learned.md
