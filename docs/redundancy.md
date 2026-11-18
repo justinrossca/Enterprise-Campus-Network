@@ -47,5 +47,3 @@ OSPF gives alternative routed paths but doesn't, by itself, guarantee Internet-s
 ## Dual-multihomed BGP redundancy
 
 The consolidated edge references configure **two eBGP upstreams per enterprise edge router**, iBGP between enterprise edges, and an eBGP link between the two ISPs. The ISP-1 default route is assigned local preference 200 on the enterprise edges. Because no successful ISP-2 Internet test or NAT/PAT configuration was supplied, physical/BGP redundancy should not be described as proven end-to-end Internet failover.
-
-Suggested evidence: `show ip bgp summary`, `show ip bgp 0.0.0.0`, `show ip route`, client traceroutes, and NAT translations captured before and after isolating ISP-1. See [WAN validation log](../validation-tests/wan-test-log.md).
