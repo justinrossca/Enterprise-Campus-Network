@@ -8,7 +8,7 @@ A Cisco networking lab I built to practice designing, configuring, and troublesh
 
 The two-tier campus uses Layer 2 access switches and Layer 3 distribution switches. Distribution provides HSRP gateways, a three-link LACP Port-channel and four routed OSPF links to the enterprise edges. EDGE-01 retains the campus DHCP pools for VLANs 10, 20 and 90.
 
-Both edge routers connect to two simulated ISPs through four eBGP sessions within Enterprise AS 65000. The network also implements iBGP, BGP local preference to prioritize ISP-1, and NAT/PAT for Internet connectivity.
+Both edge routers connect to two simulated ISPs through four eBGP sessions within Enterprise AS 65000. The network also implements iBGP, BGP local preference to prioritize ISP-01, and NAT/PAT for Internet connectivity.
 
 ## Network topology
 
@@ -27,10 +27,10 @@ A two-tier campus design with redundant uplinks, a three-link LACP EtherChannel,
 | Spanning Tree | Rapid PVST+ with per-VLAN root placement |
 | DHCP | DHCP pools on EDGE-01 and DHCP relay on distribution SVIs |
 | Access security | DHCP snooping, Dynamic ARP Inspection, and sticky MAC port security |
-| Dual-ISP eBGP | Two enterprise edge routers connected to ISP-1 (AS 65001) and ISP-2 (AS 65002) |
-| iBGP and routing policy | Loopback peering, `next-hop-self`, ISP-1 local preference 200, and `10.10.0.0/16` aggregate configuration |
-| Internet NAT/PAT | Enterprise-edge NAT/PAT through ISP-1, followed by ISP-1 PAT to the GNS3 Internet |
-| Backup ISP path | Secondary eBGP connectivity through ISP-2; ISP-2 NAT/PAT is a future addition |
+| Dual-ISP eBGP | Two enterprise edge routers connected to ISP-01 (AS 65001) and ISP-02 (AS 65002) |
+| iBGP and routing policy | Loopback peering, `next-hop-self`, ISP-01 local preference 200, and `10.10.0.0/16` aggregate configuration |
+| Internet NAT/PAT | Enterprise-edge NAT/PAT through ISP-01, followed by ISP-01 PAT to the GNS3 Internet |
+| Backup ISP path | Secondary eBGP connectivity through ISP-02; ISP-02 NAT/PAT is a future addition |
 
 ## Architecture
 
@@ -53,8 +53,8 @@ A two-tier campus design with redundant uplinks, a three-link LACP EtherChannel,
 - `EDGE-01` provides the campus DHCP pools and also connects to both simulated ISPs through eBGP.
 - `EDGE-02` provides a second routed Internet edge with both ISP connections.
 - The two enterprise edges have iBGP configured between `Loopback1` interfaces; OSPF carries the campus and loopback routes.
-- ISP-1 (AS 65001) and ISP-2 (AS 65002) peer over `203.0.113.0/30`, and each has a GNS3 NAT-facing interface.
-- ISP-1 uses two-stage NAT/PAT to reach the simulated Internet. ISP-2 provides an additional BGP path, with its NAT/PAT configuration reserved for a future expansion.
+- ISP-01 (AS 65001) and ISP-02 (AS 65002) peer over `203.0.113.0/30`, and each has a GNS3 NAT-facing interface.
+- ISP-01 uses two-stage NAT/PAT to reach the simulated Internet. ISP-02 provides an additional BGP path, with its NAT/PAT configuration reserved for a future expansion.
 
 [Full dual-ISP BGP and NAT design](docs/wan-bgp-nat.md).
 
@@ -85,7 +85,7 @@ The WAN design uses four ISP /30s and an ISP-to-ISP link (`203.0.113.0/30`). [Vi
 
 **OSPF:** Four routed distribution-to-edge links provide multiple paths for internal routing.
 
-**Dual-ISP BGP:** Both enterprise edge routers have eBGP connections to each ISP, and the ISPs peer with one another. A BGP route map prefers ISP-1 for default routing. ISP-2 NAT/PAT is not part of the current configuration.
+**Dual-ISP BGP:** Both enterprise edge routers have eBGP connections to each ISP, and the ISPs peer with one another. A BGP route map prefers ISP-01 for default routing. ISP-02 NAT/PAT is not part of the current configuration.
 
 [Redundancy design](docs/redundancy.md)
 
@@ -104,13 +104,13 @@ The published files are **sanitized, consolidated configuration references** dra
 | [ACC-01](configs/access/ACC-01.cfg) | [DIST-01](configs/distribution/DIST-01.cfg) | [EDGE-01](configs/edge/EDGE-01.cfg) |
 | [ACC-02](configs/access/ACC-02.cfg) | [DIST-02](configs/distribution/DIST-02.cfg) | [EDGE-02](configs/edge/EDGE-02.cfg) |
 
-**Simulated ISP configurations:** [ISP-1](configs/wan/ISP-1.cfg) · [ISP-2](configs/wan/ISP-2.cfg)
+**Simulated ISP configurations:** [ISP-01](configs/wan/ISP-01.cfg) · [ISP-02](configs/wan/ISP-02.cfg)
 
 ## Design trade-offs
 
 - **Dual-homed Layer 2 access:** Keeps access switching straightforward but allows STP to place alternate uplinks into discarding state on some VLANs.
 - **HSRP with asymmetric active roles:** Distributes gateway ownership across the distribution pair but requires consistent STP root planning.
-- **Dual-multihomed WAN:** Provides four enterprise-to-ISP eBGP connections and an inter-ISP link. Full ISP-2 Internet access requires a corresponding NAT/PAT and return-routing design.
+- **Dual-multihomed WAN:** Provides four enterprise-to-ISP eBGP connections and an inter-ISP link. Full ISP-02 Internet access requires a corresponding NAT/PAT and return-routing design.
 - **Consolidated single-site design:** The edge files combine BGP, NAT/PAT, campus VLAN 90, and consistent interface assignments in one reference per device.
 - **Separate SRv6 lab:** Keeps campus troubleshooting focused rather than introducing an unfinished WAN transport into every campus test.
 
@@ -129,7 +129,7 @@ This network is an ongoing learning project. As I continue developing my network
 - **Multi-Area OSPF:** Explore hierarchical OSPF designs, area border routers, and route summarization if future network expansion justifies multiple areas.
 - **HSRP Object Tracking with IP SLA:** Monitor upstream reachability and adjust HSRP priorities when connectivity is lost.
 - **Network Monitoring:** Explore centralized Syslog, NTP, and SNMPv3 for device monitoring and troubleshooting.
-- **Dual-ISP Failover:** Extend NAT/PAT to ISP-2 and refine routing policies for backup Internet connectivity.
+- **Dual-ISP Failover:** Extend NAT/PAT to ISP-02 and refine routing policies for backup Internet connectivity.
 - **BGP Policy Hardening:** Refine the `PREFER-ISP01` route map, outbound prefix filters, and iBGP best-path selection.
 - **Redundancy & Convergence:** Explore how STP, HSRP, OSPF, and BGP respond to link and device failures.
 
