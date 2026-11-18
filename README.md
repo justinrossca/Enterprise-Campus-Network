@@ -173,8 +173,4 @@ Enterprise-Campus-Network/
     └── lessons-learned.md
 ```
 
-## Lessons from the lab
-
-Having built a similar network in the past, I was already familiar with many of the technologies involved, so I encountered relatively few issues during implementation. Moving forward, I plan to expand the network by implementing OSPFv3, IPv6 addressing, HSRP for IPv6, and OSPF authentication. I also want to further optimize Rapid PVST+, particularly root bridge placement, path selection, and convergence. As the network evolves, I'll continue documenting new implementations, troubleshooting experiences, and redundancy and failover testing.
-
 [More troubleshooting notes](notes/lessons-learned.md)
